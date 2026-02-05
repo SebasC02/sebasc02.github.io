@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende sobre el Daltonismo - Una Aventura de Colores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Formas flotantes decorativas -->
+    <div class="floating-shapes">
+        <div class="shape shape-1">⭐</div>
+        <div class="shape shape-2">🎨</div>
+        <div class="shape shape-3">🌈</div>
+        <div class="shape shape-4">✨</div>
+        <div class="shape shape-5">🎈</div>
+    </div>
+
+    <!-- Indicador de Sonido -->
+    <div id="sound-indicator" class="sound-indicator" role="button" aria-label="Control de sonido">
+        🔊 Sonido: ON
+    </div>
+
+    <!-- Contador de Logros -->
+    <div id="achievements-badge" class="achievements-badge" role="button" aria-label="Tus logros">
+        <span class="badge-icon">🏆</span>
+        <span id="achievement-count">0</span> Logros
+    </div>
+
+    <!-- Modal de Recompensa -->
+    <div id="reward-modal" class="reward-modal" role="dialog" aria-labelledby="reward-title">
+        <div class="reward-content">
+            <div class="reward-icon" id="reward-icon">🎉</div>
+            <h2 class="reward-title" id="reward-title">¡Excelente Trabajo!</h2>
+            <p class="reward-message" id="reward-message">¡Has ganado una estrella!</p>
+            <div class="reward-stars" id="reward-stars"></div>
+            <button id="btn-close-reward" class="btn-primary">¡Continuar!</button>
+        </div>
+    </div>
+
+    <!-- Barra de Accesibilidad -->
+    <div id="accessibility-bar" class="accessibility-bar" role="toolbar" aria-label="Herramientas de accesibilidad">
+        <button id="btn-increase-font" aria-label="Aumentar tamaño de texto">A+</button>
+        <button id="btn-decrease-font" aria-label="Disminuir tamaño de texto">A-</button>
+        <button id="btn-high-contrast" aria-label="Activar alto contraste">Contraste</button>
+        <button id="btn-reset-settings" aria-label="Restablecer configuración">Restablecer</button>
+    </div>
+
+    <!-- Mascota -->
+    <div id="mascot" class="mascot" role="img" aria-label="Colorín, tu amigo guía">
+        <div class="mascot-body">
+            <div class="mascot-eye left"></div>
+            <div class="mascot-eye right"></div>
+            <div class="mascot-mouth"></div>
+        </div>
+        <div id="mascot-message" class="mascot-message" role="status" aria-live="polite"></div>
+    </div>
+
+    <!-- Pantalla de Bienvenida -->
+    <section id="welcome-screen" class="screen active" role="main">
+        <h1>¡Bienvenido a la Aventura de los Colores!</h1>
+        <div class="welcome-content">
+            <p>Hola, soy <strong>Colorín</strong>, tu amigo guía. Juntos vamos a descubrir cómo ves los colores.</p>
+            <p>¿Estás listo para comenzar?</p>
+            <button id="btn-start-test" class="btn-primary">¡Comenzar la Aventura!</button>
+            <button id="btn-parent-info" class="btn-secondary">Información para Padres</button>
+        </div>
+    </section>
+
+    <!-- Test de Daltonismo -->
+    <section id="test-screen" class="screen" role="main">
+        <h1>Test de Percepción de Colores</h1>
+        <div class="test-content">
+            <p id="test-instruction">Observa la imagen y dime qué número ves:</p>
+            <div class="test-image-container">
+                <img id="test-image" src="" alt="Imagen de prueba de daltonismo" />
+            </div>
+            <div class="test-options" role="radiogroup" aria-labelledby="test-instruction">
+                <button class="test-option" data-answer="1">1</button>
+                <button class="test-option" data-answer="2">2</button>
+                <button class="test-option" data-answer="3">3</button>
+                <button class="test-option" data-answer="4">4</button>
+            </div>
+            <div class="test-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="7">
+                <span id="test-progress-text">Pregunta <span id="current-question">1</span> de 7</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resultados del Test -->
+    <section id="results-screen" class="screen" role="main">
+        <h1>¡Descubrimos tu forma de ver los colores!</h1>
+        <div class="results-content">
+            <div id="result-message"></div>
+            <p>Hemos detectado que podrías tener: <strong id="detected-type"></strong></p>
+            <p>Pero tú eres quien mejor conoce cómo ves. ¿Quieres probar otro tipo?</p>
+            
+            <div class="colorblind-selector" role="radiogroup" aria-label="Selecciona tu tipo de daltonismo">
+                <label class="selector-option">
+                    <input type="radio" name="colorblind-type" value="normal" />
+                    <span>Visión Normal</span>
+                </label>
+                <label class="selector-option">
+                    <input type="radio" name="colorblind-type" value="protanopia" />
+                    <span>Protanopía (Dificultad con el rojo)</span>
+                </label>
+                <label class="selector-option">
+                    <input type="radio" name="colorblind-type" value="deuteranopia" />
+                    <span>Deuteranopía (Dificultad con el verde)</span>
+                </label>
+                <label class="selector-option">
+                    <input type="radio" name="colorblind-type" value="tritanopia" />
+                    <span>Tritanopía (Dificultad con el azul)</span>
+                </label>
+            </div>
+
+            <!-- Vista Previa de Adaptación -->
+            <div class="preview-section">
+                <h3>Vista Previa de Cómo Verás la Aplicación:</h3>
+                <div id="preview-container" class="preview-container">
+                    <div class="preview-item">
+                        <div class="preview-box" id="preview-primary"></div>
+                        <span>Color Principal</span>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-box" id="preview-secondary"></div>
+                        <span>Color Secundario</span>
+                    </div>
+                    <div class="preview-item">
+                        <div class="preview-box" id="preview-accent"></div>
+                        <span>Color de Énfasis</span>
+                    </div>
+                </div>
+                <p class="preview-description" id="preview-description">Selecciona un tipo para ver cómo se adaptará la aplicación</p>
+            </div>
+
+            <button id="btn-confirm-type" class="btn-primary">Continuar con esta opción</button>
+        </div>
+    </section>
+
+    <!-- Menú Principal -->
+    <section id="main-menu" class="screen" role="main">
+        <h1>¿Qué quieres hacer hoy?</h1>
+        <nav class="menu-grid" aria-label="Menú principal">
+            <button id="btn-game-colors" class="menu-card" aria-label="Juego: Encuentra el color diferente">
+                <span class="menu-icon">🎨</span>
+                <span class="menu-title">Encuentra el Color</span>
+            </button>
+            <button id="btn-game-memory" class="menu-card" aria-label="Juego: Memoria de formas">
+                <span class="menu-icon">🧩</span>
+                <span class="menu-title">Memoria de Formas</span>
+            </button>
+            <button id="btn-game-patterns" class="menu-card" aria-label="Juego: Detective de Patrones">
+                <span class="menu-icon">🔍</span>
+                <span class="menu-title">Detective de Patrones</span>
+            </button>
+            <button id="btn-learn" class="menu-card" aria-label="Aprende sobre el daltonismo">
+                <span class="menu-icon">📚</span>
+                <span class="menu-title">Aprende Más</span>
+            </button>
+            <button id="btn-change-type" class="menu-card" aria-label="Cambiar tipo de daltonismo">
+                <span class="menu-icon">⚙️</span>
+                <span class="menu-title">Cambiar Configuración</span>
+            </button>
+        </nav>
+    </section>
+
+    <!-- Juego: Encuentra el Color -->
+    <section id="game-colors-screen" class="screen" role="main">
+        <h1>Encuentra el Color Diferente</h1>
+        <div class="game-content">
+            <p>Encuentra el cuadro que es diferente a los demás:</p>
+            <div id="color-game-grid" class="color-game-grid" role="list" aria-label="Cuadrícula de colores"></div>
+            <div class="game-score">
+                <span>Puntos: <strong id="game-score">0</strong></span>
+                <span>Nivel: <strong id="game-level">1</strong></span>
+            </div>
+            <button id="btn-back-menu-1" class="btn-secondary">Volver al Menú</button>
+        </div>
+    </section>
+
+    <!-- Juego: Memoria -->
+    <section id="game-memory-screen" class="screen" role="main">
+        <h1>Memoria de Formas</h1>
+        <div class="game-content">
+            <p>Encuentra las parejas de formas iguales:</p>
+            <div id="memory-game-grid" class="memory-game-grid" role="list" aria-label="Cuadrícula de memoria"></div>
+            <div class="game-score">
+                <span>Movimientos: <strong id="memory-moves">0</strong></span>
+                <span>Parejas: <strong id="memory-pairs">0</strong> / 6</span>
+            </div>
+            <button id="btn-reset-memory" class="btn-secondary">Reiniciar</button>
+            <button id="btn-back-menu-2" class="btn-secondary">Volver al Menú</button>
+        </div>
+    </section>
+
+    <!-- Juego: Detective de Patrones -->
+    <section id="game-patterns-screen" class="screen" role="main">
+        <h1>Detective de Patrones</h1>
+        <div class="game-content">
+            <div class="pattern-instructions">
+                <p id="pattern-instruction">Encuentra el patrón que es diferente a los demás</p>
+                <div class="pattern-info">
+                    <span>Nivel: <strong id="pattern-level">1</strong></span>
+                    <span>Puntos: <strong id="pattern-score">0</strong></span>
+                    <span>Tipo: <strong id="pattern-type">-</strong></span>
+                </div>
+            </div>
+            <div id="pattern-game-grid" class="pattern-game-grid" role="list" aria-label="Cuadrícula de patrones"></div>
+            <button id="btn-back-menu-4" class="btn-secondary">Volver al Menú</button>
+        </div>
+    </section>
+
+    <!-- Pantalla Educativa -->
+    <section id="learn-screen" class="screen" role="main">
+        <h1>Aprende sobre el Daltonismo</h1>
+        <div class="learn-content">
+            <article>
+                <h2>¿Qué es el Daltonismo?</h2>
+                <p>El daltonismo es una condición que hace que algunas personas vean los colores de manera diferente. ¡No es malo, solo es diferente!</p>
+                
+                <h3>Tipos de Daltonismo:</h3>
+                <ul>
+                    <li><strong>Protanopía:</strong> Dificultad para ver el color rojo.</li>
+                    <li><strong>Deuteranopía:</strong> Dificultad para ver el color verde.</li>
+                    <li><strong>Tritanopía:</strong> Dificultad para ver el color azul.</li>
+                </ul>
+
+                <h3>Consejos para el Día a Día:</h3>
+                <ul>
+                    <li>Usa etiquetas con nombres de colores en tus cosas.</li>
+                    <li>Pide ayuda cuando necesites combinar colores.</li>
+                    <li>Aprende a reconocer objetos por su forma, no solo por su color.</li>
+                    <li>¡Recuerda que eres especial tal como eres!</li>
+                </ul>
+            </article>
+            <button id="btn-back-menu-3" class="btn-primary">Volver al Menú</button>
+        </div>
+    </section>
+
+    <!-- Información para Padres -->
+    <section id="parent-info-screen" class="screen" role="main">
+        <h1>Información para Padres</h1>
+        <div class="parent-content">
+            <article>
+                <h2>Comprendiendo el Daltonismo en Niños</h2>
+                <p>El daltonismo es una deficiencia en la percepción del color que afecta aproximadamente al 8% de los niños y al 0.5% de las niñas. Es importante detectarlo temprano para ayudar a su hijo a adaptarse.</p>
+
+                <h3>Signos de Daltonismo:</h3>
+                <ul>
+                    <li>Dificultad para distinguir entre rojo y verde, o azul y amarillo</li>
+                    <li>Problemas para identificar colores en dibujos o juegos</li>
+                    <li>Uso incorrecto de nombres de colores</li>
+                    <li>Dificultad con tareas escolares relacionadas con colores</li>
+                </ul>
+
+                <h3>Cómo Ayudar a su Hijo:</h3>
+                <ul>
+                    <li><strong>Educación:</strong> Enseñe a su hijo sobre su condición de manera positiva.</li>
+                    <li><strong>Comunicación:</strong> Informe a maestros y cuidadores sobre el daltonismo.</li>
+                    <li><strong>Herramientas:</strong> Use etiquetas, organizadores con formas, y aplicaciones de ayuda.</li>
+                    <li><strong>Apoyo emocional:</strong> Refuerce que el daltonismo no limita sus capacidades.</li>
+                    <li><strong>Consulta médica:</strong> Visite a un oftalmólogo para un diagnóstico profesional.</li>
+                </ul>
+
+                <h3>Adaptaciones en el Hogar y Escuela:</h3>
+                <ul>
+                    <li>Organice la ropa con etiquetas escritas</li>
+                    <li>Use marcadores con nombres de colores</li>
+                    <li>Solicite materiales educativos con alto contraste</li>
+                    <li>Enseñe estrategias alternativas para identificar objetos</li>
+                </ul>
+
+                <h3>Recursos Adicionales:</h3>
+                <p>Consulte con profesionales de la salud visual y busque grupos de apoyo para familias con niños daltónicos.</p>
+            </article>
+            <button id="btn-back-welcome" class="btn-primary">Volver al Inicio</button>
+        </div>
+    </section>
+
+    <script src="javascript.js"></script>
+</body>
+</html>
